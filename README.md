@@ -37,12 +37,12 @@ you first need to install some python dependencies into your local python enviro
 by simply running ``pip install -r requirements.txt`. Note that you need to 
 launch the java application before running these tests. If everything is correct, you should see this output:
 
-```test_create_user_and_delete (__main__.TestRestAPI) ... ok
-test_create_user_with_non_admin_user (__main__.TestRestAPI) ... ok
-test_get_list_of_users (__main__.TestRestAPI) ... ok
-test_get_user_that_does_not_exist (__main__.TestRestAPI) ... ok
-test_update_user (__main__.TestRestAPI) ... ok
-```
+    test_create_user_and_delete (__main__.TestRestAPI) ... ok
+    test_create_user_with_non_admin_user (__main__.TestRestAPI) ... ok
+    test_get_list_of_users (__main__.TestRestAPI) ... ok
+    test_get_user_that_does_not_exist (__main__.TestRestAPI) ... ok
+    test_update_user (__main__.TestRestAPI) ... ok
+
  
 #How to run it
 
