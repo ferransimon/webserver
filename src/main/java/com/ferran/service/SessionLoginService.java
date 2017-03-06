@@ -11,7 +11,7 @@ import com.ferran.model.User;
 import java.net.HttpCookie;
 import java.util.Optional;
 
-public class SessionLoginService implements LoginService<Session> {
+public class SessionLoginService implements LoginService<Session<User>> {
 
 
     private AuthRepository<User> authRepository;
@@ -23,7 +23,7 @@ public class SessionLoginService implements LoginService<Session> {
     }
 
     @Override
-    public Optional<Session> doLogin(String username, String password, HttpResponse response) {
+    public Optional<Session<User>> doLogin(String username, String password, HttpResponse response) {
         Optional<User> user = authRepository.findByUserNameAndPassword(username, password);
         if(!user.isPresent()) return Optional.empty();
         Session<User> session = sessionManager.newSession(user.get());
@@ -37,7 +37,7 @@ public class SessionLoginService implements LoginService<Session> {
     }
 
     @Override
-    public void doLogout(Session session) {
+    public void doLogout(Session<User> session) {
         sessionManager.deleteSession(session);
     }
 }

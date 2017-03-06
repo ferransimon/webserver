@@ -1,6 +1,7 @@
 package com.ferran;
 
 import com.ferran.controller.LoginController;
+import com.ferran.controller.LogoutController;
 import com.ferran.controller.PageController;
 import com.ferran.controller.rest.*;
 import com.ferran.http.MediaType;
@@ -36,11 +37,11 @@ public class Routes{
     public Routes(
             final Gson gson,
             final Render htmlViewRender,
-            final LoginService<Session> loginService,
+            final LoginService<Session<User>> loginService,
             final UserService userService,
             Tokenizer tokenizerService) {
         RequestHandler loginController = new LoginController(htmlViewRender, loginService);
-        RequestHandler logoutController = new LoginController(htmlViewRender, loginService);
+        RequestHandler logoutController = new LogoutController(loginService);
         RequestHandler homeController = new PageController("home", htmlViewRender);
         RequestHandler userListController = new ListUsersController(gson, userService);
         RequestHandler userPostController = new CreateUserController(gson, userService);

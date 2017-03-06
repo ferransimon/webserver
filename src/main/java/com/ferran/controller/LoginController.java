@@ -4,6 +4,7 @@ import com.ferran.http.Constants;
 import com.ferran.http.HttpContext;
 import com.ferran.http.HttpResponse;
 import com.ferran.http.RequestMethod;
+import com.ferran.model.User;
 import com.sun.net.httpserver.HttpExchange;
 import com.ferran.http.render.Render;
 import com.ferran.http.routing.RequestHandler;
@@ -20,9 +21,9 @@ public class LoginController implements RequestHandler {
     private static final String DEFAULT_HOME_PAGE = "home";
 
     private Render render;
-    private LoginService<Session> loginService;
+    private LoginService<Session<User>> loginService;
 
-    public LoginController(Render render, LoginService<Session> loginService){
+    public LoginController(Render render, LoginService<Session<User>> loginService){
         this.render = render;
         this.loginService = loginService;
     }
@@ -30,7 +31,7 @@ public class LoginController implements RequestHandler {
     @Override
     public void handle(HttpExchange request, HttpResponse httpResponse) throws IOException {
         HttpContext params = (HttpContext) request.getAttribute(Constants.REUQEST_PARAMS_KEY_NAME);
-        Optional<Session> contextSession = (Optional<Session>)request.getAttribute(Constants.REUQEST_SESSION_KEY_NAME);
+        Optional<Session<User>> contextSession = (Optional<Session<User>>)request.getAttribute(Constants.REUQEST_SESSION_KEY_NAME);
         String redirect = null;
         if(params.getQueryParams().isPresent()) {
             redirect = params.getQueryParams().get().getOrDefault("redirect", DEFAULT_HOME_PAGE);
@@ -55,7 +56,7 @@ public class LoginController implements RequestHandler {
             params.getFormParams().ifPresent(
                     map -> {
                         if(map.containsKey("username") && map.containsKey("password")){
-                            Optional<Session> session = loginService.doLogin(map.get("username"), map.get("password"), httpResponse);
+                            Optional<Session<User>> session = loginService.doLogin(map.get("username"), map.get("password"), httpResponse);
                             if(session.isPresent()){
                                 String defaultPath = DEFAULT_HOME_PAGE;
                                 if(params.getQueryParams().isPresent()) {

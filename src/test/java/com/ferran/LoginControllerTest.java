@@ -26,7 +26,7 @@ public class LoginControllerTest {
     @Mock
     private Render render;
     @Mock
-    private LoginService<Session> loginService;
+    private LoginService<Session<User>> loginService;
 
     @Mock
     private HttpExchange mockExchange;

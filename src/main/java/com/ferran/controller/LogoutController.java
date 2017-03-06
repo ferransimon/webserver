@@ -1,6 +1,7 @@
 package com.ferran.controller;
 
 
+import com.ferran.model.User;
 import com.sun.net.httpserver.HttpExchange;
 import com.ferran.http.Constants;
 import com.ferran.http.HttpResponse;
@@ -13,15 +14,15 @@ import java.util.Optional;
 
 public class LogoutController implements RequestHandler{
 
-    private LoginService<Session> loginService;
+    private LoginService<Session<User>> loginService;
 
-    public LogoutController(LoginService<Session> loginService){
+    public LogoutController(LoginService<Session<User>> loginService){
         this.loginService = loginService;
     }
 
     @Override
     public void handle(HttpExchange request, HttpResponse response) throws IOException {
-        Optional<Session> session = Optional.ofNullable((Session) request.getAttribute(Constants.REUQEST_SESSION_KEY_NAME));
+        Optional<Session<User>> session = (Optional<Session<User>>)request.getAttribute(Constants.REUQEST_SESSION_KEY_NAME);
         session.ifPresent(
                 s -> this.loginService.doLogout(s)
         );

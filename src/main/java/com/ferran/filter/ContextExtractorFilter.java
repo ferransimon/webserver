@@ -18,17 +18,14 @@ import java.util.*;
 public class ContextExtractorFilter<T> extends Filter {
 
     private Manager<T> userSessionManager;
-    private DateService dateService;
     private HttpContextParser<HttpExchange> contextParser;
     private Set<AuthStrategy<T>> authStrategies = new HashSet<>();
 
     public ContextExtractorFilter(
             Manager<T> userSessionManager,
-            DateService dateService,
             HttpContextParser<HttpExchange> contextParser,
             Set<AuthStrategy<T>> authStrategies) {
         this.userSessionManager = userSessionManager;
-        this.dateService = dateService;
         this.contextParser = contextParser;
         this.authStrategies = authStrategies;
     }

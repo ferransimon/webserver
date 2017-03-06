@@ -30,6 +30,6 @@ public class PageController implements RequestHandler {
         Map<String, String> variables = new HashMap<>();
         variables.put("username",session.get().getUser().getUsername());
         variables.put("title", pageName);
-        httpResponse.sendResponse(render.render("page", variables));
+        httpResponse.sendResponse(render.render(pageName, variables));
     }
 }

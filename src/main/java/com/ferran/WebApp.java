@@ -1,10 +1,5 @@
 package com.ferran;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
 import com.ferran.dao.DAO;
 import com.ferran.dao.InMemoryUserDAO;
 import com.ferran.filter.ContextExtractorFilter;
@@ -23,8 +18,13 @@ import com.ferran.model.NewUser;
 import com.ferran.model.User;
 import com.ferran.repository.SessionInMemoryRepository;
 import com.ferran.repository.UserInMemoryRepository;
-import rx.subjects.PublishSubject;
 import com.ferran.service.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.sun.net.httpserver.HttpContext;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+import rx.subjects.PublishSubject;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -80,7 +80,8 @@ public class WebApp {
 
         /**
          * Creating the subject that will handler user actions, like update or delete
-         * to update the session and log the action performed
+         * to update the session and log the action performed. Note how easy would be to
+         * add a handler to send statistically data to a external service for interactions with the API.
          */
         PublishSubject<UserEvent> userUpdates = PublishSubject.create();
         EventHandler<UserEvent> userEventHandler = new UserEventHandler(sessionRepository);
@@ -92,7 +93,7 @@ public class WebApp {
         );
 
         UserService userService = new UserService(userDAO, encrypter, userUpdates);
-        LoginService<Session> loginService = new SessionLoginService(userInMemoryRepository, sessionManager);
+        LoginService<Session<User>> loginService = new SessionLoginService(userInMemoryRepository, sessionManager);
         AuthStrategy<User> basicAuth = new BasicAuthStrategy<>(userInMemoryRepository);
         RoleManager<User.Role, User> roleService = new RoleService();
 
@@ -147,7 +148,6 @@ public class WebApp {
         HttpContext context = httpServer.createContext("/", gateway);
         context.getFilters().add(new ContextExtractorFilter<User>(
                 sessionManager,
-                dateService,
                 contextParser,
                 Collections.singleton(basicAuth)
             )
